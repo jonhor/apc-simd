@@ -24,17 +24,29 @@ TEST_CASE("find character in string")
     
     char needle = 'b';
 
-    CHECK(find_naive(bytes, needle) == 999000);
-    CHECK(find_avx2(bytes, needle) == 999000);
+    CHECK(find_naive(haystack, needle) == 999000);
+    CHECK(find_avx2_asm(haystack, needle) == 999000);
+    CHECK(find_avx2_intrinsics(haystack, needle) == 999000);
+    CHECK(find_std_simd(haystack, needle) == 999000);
 
     BENCHMARK("find.h find_naive")
     {
         return find_naive(haystack, needle);
     };
 
-    BENCHMARK("find.h find_avx2")
+    BENCHMARK("find.h find_avx2_asm")
     {
-        return find_avx2(haystack, needle);
+        return find_avx2_asm(haystack, needle);
+    };
+
+    BENCHMARK("find.h find_avx2_intrinsics")
+    {
+        return find_avx2_intrinsics(haystack, needle);
+    };
+
+    BENCHMARK("find.h find_std_simd")
+    {
+        return find_std_simd(haystack, needle);
     };
 
     BENCHMARK("std::string_view::find")
